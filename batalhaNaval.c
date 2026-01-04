@@ -1,40 +1,119 @@
 #include <stdio.h>
+#include <string.h>
 
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
+#define LINHASG 10
+#define COLUNASG 10
+
+#define LINHASM 3
+#define COLUNASM 5
 
 int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
+    int k = 2;
+    int index;
+    char buffer[10];
+    char *mar[LINHASG][COLUNASG] = {{"A1","B","C","D","E","F","G","H","I","J"}};
+    char *cone[3][5];
+    char *cruz[3][5];
+    char *octaedro[3][5];
 
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+    //coloca os numeros de 2 a 10 na primeira coluna referente a cada linha
+    for (int i = 1; i < LINHASG; i++){
+        index = i + 1;
+        sprintf(buffer, "%d", index);
+        mar[i][0] = strdup(buffer);
+    }
 
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
+    // coloca "O" onde não tem navio
+    for (int i = 0; i < LINHASG; i++) {
+        for (int j = 0; j < COLUNASG; j++) {
+            if (mar[i][j] == NULL) {
+                mar[i][j] = "O";
+            }
+        }
+    }
 
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
+    /*
+    //posicionando navio horinzontal 01
+    for (int i = 3; i < 4; i++){
+        for (int j = 4; j < 7; j++) {
+            mar[i][j] = "#";
+        }
+    }
     
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
+    //posicionando navio vertical 01
+    for (int j = 8; j < 9; j++){
+        for (int i = 7; i > 4; i--){
+            mar[i][j] = "#";
+        }  
+    }
 
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
+    //posionando navio diagonal 01
+    for (int i = 5, j = 1; i < 7 || j < 4; i++, j++){
+        mar[i][j] = "#";
+    }
+
+    //posionando navio diagonal 02
+    for (int i = 9, j = 4; i > 7 || j < 7; i--, j++){
+        mar[i][j] = "#";
+    }
+    */
+
+    //Habilidade Cone
+    for (int j = 0; j < COLUNASM; j++){
+        for (int i = 0; i < LINHASM; i++){
+            if ((i + j) >= 2 && (j - i) < 3) {
+                cone[i][j] = "#"; 
+            } else {
+                cone[i][j] = "0";
+            }
+        }
+    }
+    
+    //Habilidade Cruz
+    for (int i = 0; i < LINHASM; i++){
+        for (int j = 0; j < COLUNASM; j++){
+            if ((i > 0 && i < 2)){
+                cruz[i][j] = "#"; 
+            } else if (j == 2 && (i + j) % 2 == 0) {
+                cruz[i][j] = "#";
+            } else {
+                cruz[i][j] = "0"; 
+            }
+        }
+    }
+
+    //Habilidade Octaedro
+    for (int i = 0; i < LINHASM; i++){
+        for (int j = 0; j < COLUNASM; j++){
+            if ((i > 0 && i < 2 && j != 0 && j != 4)){
+                octaedro[i][j] = "#"; 
+            } else if (j == 2 && (i + j) % 2 == 0) {
+                octaedro[i][j] = "#";
+            } else {
+                octaedro[i][j] = "0"; 
+            }
+        }
+    }
+
+    //Inserindo Habilidades
+    for (int i = 0; i < LINHASM; i++){
+        for (int j = 0; j < COLUNASM; j++){
+            mar[2 + i][2 + j] = cone[i][j];
+            mar[6 + i][1 + j] = cruz[i][j];
+            //mar[6 + i][1 + j] = octaedro[i][j];
+        }
+    }
+    
+    
+    
+    
+    // exibição da tabela
+    for (int i = 0; i < LINHASG; i++) {
+        for (int j = 0; j < COLUNASG; j++) {
+            printf(" %s ", mar[i][j]);
+        }
+        printf("\n");
+    }
 
     return 0;
 }
